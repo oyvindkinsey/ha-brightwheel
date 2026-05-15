@@ -1,10 +1,7 @@
 """Binary sensor exposing the child's check-in state."""
 from __future__ import annotations
 
-from homeassistant.components.binary_sensor import (
-    BinarySensorDeviceClass,
-    BinarySensorEntity,
-)
+from homeassistant.components.binary_sensor import BinarySensorEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
@@ -35,7 +32,6 @@ async def async_setup_entry(
 class BrightwheelCheckedInSensor(
     CoordinatorEntity[BrightwheelCoordinator], BinarySensorEntity
 ):
-    _attr_device_class = BinarySensorDeviceClass.PRESENCE
     _attr_has_entity_name = True
     _attr_name = "Checked in"
 
