@@ -1,0 +1,22 @@
+checkin:
+  name: Check in
+  description: Check the configured child into daycare.
+  fields:
+    config_entry_id:
+      name: Config entry
+      description: Only required if multiple Brightwheel entries are configured.
+      required: false
+      selector:
+        config_entry:
+          integration: brightwheel
+checkout:
+  name: Check out
+  description: Check the configured child out of daycare.
+  fields:
+    config_entry_id:
+      name: Config entry
+      description: Only required if multiple Brightwheel entries are configured.
+      required: false
+      selector:
+        config_entry:
+          integration: brightwheel

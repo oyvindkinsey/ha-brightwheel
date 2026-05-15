@@ -1,0 +1,76 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Sign in to Brightwheel",
+        "description": "Enter your Brightwheel email and password. If your account has 2FA enabled, you'll be asked for a code next.",
+        "data": {
+          "email": "Email",
+          "password": "Password"
+        }
+      },
+      "two_factor": {
+        "title": "Two-factor code",
+        "description": "Enter the code Brightwheel just emailed you.",
+        "data": {
+          "two_fa_code": "6-digit code"
+        }
+      },
+      "qr": {
+        "title": "Daycare QR data",
+        "description": "Scan the daycare QR with any QR reader and paste the decoded JSON here (must contain school_id and secret).",
+        "data": {
+          "qr_data": "QR JSON",
+          "time_zone": "Time zone"
+        }
+      },
+      "student": {
+        "title": "Pick a child",
+        "description": "Select which student + room this integration entry should manage.",
+        "data": {
+          "student": "Student",
+          "child_name": "Display name (optional, defaults to student name)"
+        }
+      },
+      "pin": {
+        "title": "Check-in PIN",
+        "description": "Enter your 4-digit Brightwheel check-in PIN.",
+        "data": {
+          "pin": "PIN"
+        }
+      }
+    },
+    "error": {
+      "auth": "Sign-in failed — check email, password, and 2FA code.",
+      "bad_qr": "Could not parse QR data — expected JSON with school_id + secret.",
+      "students_fetch": "Couldn't load students for that QR. Check the QR is for this daycare and you're signed in to the right account.",
+      "no_students": "No students were returned for that QR.",
+      "invalid": "Invalid selection."
+    },
+    "abort": {
+      "already_configured": "This child is already configured."
+    }
+  },
+  "services": {
+    "checkin": {
+      "name": "Check in",
+      "description": "Check the configured child into daycare.",
+      "fields": {
+        "config_entry_id": {
+          "name": "Config entry",
+          "description": "Only required if multiple Brightwheel entries are configured."
+        }
+      }
+    },
+    "checkout": {
+      "name": "Check out",
+      "description": "Check the configured child out of daycare.",
+      "fields": {
+        "config_entry_id": {
+          "name": "Config entry",
+          "description": "Only required if multiple Brightwheel entries are configured."
+        }
+      }
+    }
+  }
+}
