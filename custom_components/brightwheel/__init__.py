@@ -33,7 +33,7 @@ from .coordinator import BrightwheelCoordinator
 
 _LOGGER = logging.getLogger(__name__)
 
-PLATFORMS: list[Platform] = [Platform.BINARY_SENSOR]
+PLATFORMS: list[Platform] = [Platform.BINARY_SENSOR, Platform.SWITCH]
 
 SIGNATURE_PNG = (Path(__file__).parent / "signature.png").read_bytes()
 
