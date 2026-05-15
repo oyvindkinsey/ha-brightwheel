@@ -102,9 +102,14 @@ def _async_register_services(hass: HomeAssistant) -> None:
     async def _do(call: ServiceCall, *, checked_in: bool) -> None:
         client, coordinator = _resolve(call)
         try:
-            await client.transition(checked_in=checked_in)
+            result = await client.transition(checked_in=checked_in)
         except BrightwheelError as e:
             raise HomeAssistantError(str(e)) from e
+        if result is None:
+            _LOGGER.info(
+                "Brightwheel already %s — skipping",
+                "checked in" if checked_in else "checked out",
+            )
         await coordinator.async_request_refresh()
 
     async def _checkin(call: ServiceCall) -> None:

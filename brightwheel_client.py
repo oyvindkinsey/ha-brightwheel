@@ -95,8 +95,11 @@ async def _state_loop(client: BrightwheelClient, name: str) -> None:
         if choice in ("i", "o"):
             checked_in = choice == "i"
             try:
-                await client.transition(checked_in=checked_in)
-                print(f"{'check-in' if checked_in else 'check-out'} submitted")
+                result = await client.transition(checked_in=checked_in)
+                if result is None:
+                    print(f"already {'checked in' if checked_in else 'checked out'} — no action")
+                else:
+                    print(f"{'check-in' if checked_in else 'check-out'} submitted")
             except BrightwheelError as e:
                 print(f"transition failed: {e}")
         else:

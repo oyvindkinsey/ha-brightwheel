@@ -208,7 +208,10 @@ class BrightwheelClient:
                 )
         return out
 
-    async def _student_and_room(self) -> tuple[dict[str, Any], dict[str, Any]]:
+    async def _student_room_state(
+        self,
+    ) -> tuple[dict[str, Any], dict[str, Any], bool]:
+        """Return (student, room, checked_in) for the configured pair from one GET."""
         data = await self._students_for_checkin()
         for s in data.get("students", []):
             student = s.get("student") or {}
@@ -217,7 +220,7 @@ class BrightwheelClient:
             for rs in s.get("room_states", []):
                 room = rs.get("room") or {}
                 if room.get("object_id") == self._room_id:
-                    return student, room
+                    return student, room, bool(rs.get("checked_in"))
         raise BrightwheelError(
             f"student/room pair not found in students_for_checkin "
             f"(student_id={self._student_id}, room_id={self._room_id})"
@@ -269,14 +272,20 @@ class BrightwheelClient:
 
         return f"{s3_url}/{fields['key']}"
 
-    async def transition(self, *, checked_in: bool) -> dict[str, Any]:
+    async def transition(self, *, checked_in: bool) -> dict[str, Any] | None:
         """Perform a check-in (True) or check-out (False).
+
+        Returns None and skips the POST if the student is already in the target
+        state (avoids the server-side E2005 duplicate-status rejection). Returns
+        the response body on a successful transition.
 
         Fetches the rich denormalized data needed for the parent-feed entry
         to render, then POSTs the full body.
         """
+        student, room, current = await self._student_room_state()
+        if current is checked_in:
+            return None
         guardian = await self._guardian_profile()
-        student, room = await self._student_and_room()
         questions_template = await self._health_screen_questions()
         sig_url = await self._upload_signature()
 
